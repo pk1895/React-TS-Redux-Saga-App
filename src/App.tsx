@@ -1,24 +1,33 @@
-import React from 'react';
-import logo from './logo.svg';
 import './App.css';
+import Counter from './components/Counter';
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from './redux/configureStore';
+import { getUser } from "./redux/store/actions/userAction";
+import { useEffect } from 'react';
 
 function App() {
+
+  const count: number = useSelector((state: RootState) => state.counterReducer.count);
+  const lastName: string = useSelector((state: RootState) => state.userReducer.lastName);
+  console.log(lastName);
+
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(getUser());
+  }, [dispatch])
+
+  const voters: string[] = [
+    "Prasad Khanapure ",
+    "Nikita Gourshete",
+  ];
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <h2> Total Votes: {count}</h2>
+      {voters.map(voter => (
+        <Counter name={voter} />
+      ))}
     </div>
   );
 }
